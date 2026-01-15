@@ -38,15 +38,16 @@ def serp_search(domain):
 
 
 def gemini_enrich(lead, serp):
-model = genai.GenerativeModel("models/gemini-pro")
+    model = genai.GenerativeModel("models/gemini-pro")
 
     prompt = f"""
-    We have a business lead.
+We have a business lead.
 
-    Name: {lead['first_name']} {lead['last_name']}
-    Company: {lead['firm_name']}
-    Declared title: {lead['declared_title']}
-    Website: {lead['website_url']}
+Name: {lead['first_name']} {lead['last_name']}
+Email: {lead['email']}
+Company: {lead['firm_name']}
+Declared title: {lead['declared_title']}
+Website: {lead['website_url']}
 
     SERP data:
     {serp}
@@ -61,6 +62,7 @@ model = genai.GenerativeModel("models/gemini-pro")
     """
 
     return model.generate_content(prompt).text
+
 
 
 def main():
