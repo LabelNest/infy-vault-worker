@@ -3,7 +3,7 @@ import os
 from supabase import create_client
 from dotenv import load_dotenv
 import requests
-import google.generativeai as genai
+from google import genai
 
 load_dotenv()
 
@@ -13,7 +13,7 @@ SERP_API_KEY = os.getenv("SERP_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-genai.configure(api_key=GEMINI_API_KEY)
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 
 def get_next_job():
@@ -38,16 +38,14 @@ def serp_search(domain):
 
 
 def gemini_enrich(lead, serp):
-    model = genai.GenerativeModel("models/gemini-pro")
-
     prompt = f"""
-We have a business lead.
+    We have a business lead.
 
-Name: {lead['first_name']} {lead['last_name']}
-Email: {lead['email']}
-Company: {lead['firm_name']}
-Declared title: {lead['declared_title']}
-Website: {lead['website_url']}
+    Name: {lead['first_name']} {lead['last_name']}
+    Email: {lead['email']}
+    Company: {lead['firm_name']}
+    Declared title: {lead['declared_title']}
+    Website: {lead['website_url']}
 
     SERP data:
     {serp}
@@ -61,7 +59,13 @@ Website: {lead['website_url']}
     confidence_score (0-100)
     """
 
-    return model.generate_content(prompt).text
+    response = client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=prompt
+    )
+
+    return response.text
+
 
 
 

@@ -2,4 +2,4 @@ supabase
 psycopg2-binary
 python-dotenv
 requests
-google-generativeai
+google-genai
