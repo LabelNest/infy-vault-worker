@@ -38,7 +38,7 @@ def serp_search(domain):
 
 
 def gemini_enrich(lead, serp):
-    model = genai.GenerativeModel("gemini-1.5-pro")
+model = genai.GenerativeModel("models/gemini-pro")
 
     prompt = f"""
     We have a business lead.
